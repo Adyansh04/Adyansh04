@@ -197,7 +197,7 @@ def fusion_conveyornet():
     2-line description, so nothing depends on hover. Cards flank a QC sort hub
     that classifies each package into a category neuron -> output -> GitHub."""
     W_, H_ = 1000, 700
-    CW, CH, PITCH = 330, 52, 62
+    CW, CH, PITCH = 330, 54, 64
     hub, HS = (500, 250), 38
     T = 12.0
     s = [head(W_, H_)]
@@ -299,8 +299,8 @@ def fusion_conveyornet():
     # ---- project cards: icon + name + 2-line description, whole card is a link
     for p, (x, y) in zip(P, lcards + rcards):
         c = CAT[p["cat"]]
-        lines = textwrap.wrap(p["short"], 54)[:2]
-        body = "".join(f'<text x="48" y="{33 + n * 11}" font-size="8" fill="{MUTED}">{ln}</text>'
+        lines = textwrap.wrap(p["short"], 50)[:2]
+        body = "".join(f'<text x="48" y="{34 + n * 12}" font-size="8.8" fill="{MUTED}">{ln}</text>'
                        for n, ln in enumerate(lines))
         s.append(
             f'<a href="{p["url"]}" target="_blank" class="hot">'
@@ -309,7 +309,7 @@ def fusion_conveyornet():
             f'<rect width="{CW}" height="{CH}" rx="9" fill="{DARK[p["cat"]]}" stroke="{c}" stroke-width="1.3"/>'
             f'<rect width="4" height="{CH}" rx="2" fill="{c}"/>'
             f'<g transform="translate(27,{CH / 2})">{icon(p["key"], c, 0.95, 1.5)}</g>'
-            f'<text x="48" y="19" font-size="11.5" font-weight="800" fill="{TEXT}">{p["name"]}</text>'
+            f'<text x="48" y="20" font-size="12.5" font-weight="800" fill="{TEXT}">{p["name"]}</text>'
             f'{body}</g></a>')
 
     # ---- QC sort hub
@@ -320,7 +320,7 @@ def fusion_conveyornet():
 <path d="M-17,0 h34 M0,-17 v34" stroke="#D29922" stroke-width="1.7"/>
 <g><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite"/>
 <circle r="27" fill="none" stroke="#D29922" stroke-width="0.9" stroke-dasharray="2,9" opacity="0.6"/></g>
-<text y="-{HS + 12}" font-size="9" font-weight="800" fill="#D29922" text-anchor="middle">QC · SORT HUB</text></g>''')
+<text y="-{HS + 12}" font-size="10" font-weight="800" fill="#D29922" text-anchor="middle">QC · SORT HUB</text></g>''')
 
     # ---- category neurons
     for k, (nx, ny) in neurons.items():
@@ -334,8 +334,8 @@ def fusion_conveyornet():
         s.append(f'<circle cx="{nx}" cy="{ny}" r="15" fill="{DARK[k]}" stroke="{CAT[k]}" stroke-width="1.6">'
                  f'<animate attributeName="stroke-width" values="{";".join(vals)}" keyTimes="{";".join(kts)}" dur="{T}s" repeatCount="indefinite"/></circle>'
                  f'<circle cx="{nx}" cy="{ny}" r="4.5" fill="{CAT[k]}" opacity="0.85"/>'
-                 f'<text x="{nx}" y="{ny + 30}" font-size="7" font-weight="700" fill="{CAT[k]}" text-anchor="middle">{nlabel[k]}</text>')
-    s.append(f'<text x="{hub[0]}" y="{neurons["rob"][1] - 44}" font-size="7.5" fill="{MUTED}" text-anchor="middle">neural sort · 4 classes</text>')
+                 f'<text x="{nx}" y="{ny + 31}" font-size="8" font-weight="700" fill="{CAT[k]}" text-anchor="middle">{nlabel[k]}</text>')
+    s.append(f'<text x="{hub[0]}" y="{neurons["rob"][1] - 44}" font-size="8.5" fill="{MUTED}" text-anchor="middle">neural sort · 4 classes</text>')
 
     # ---- output neuron + shipping
     s.append(f'''<g transform="translate({out[0]},{out[1]})">
@@ -345,12 +345,12 @@ def fusion_conveyornet():
 <text y="10" font-size="6" fill="#3FB950" text-anchor="middle">output layer</text></g>''')
     s.append(f'''<g transform="translate({ship[0]},{ship[1]})">
 <rect x="-70" y="-22" width="140" height="44" rx="9" fill="#0b2213" stroke="#3FB950" stroke-width="2"/>
-<text y="-2" font-size="10" font-weight="800" fill="{TEXT}" text-anchor="middle">github.com/Adyansh04</text>
-<text y="11" font-size="7" fill="#3FB950" text-anchor="middle">15 repositories shipped</text></g>''')
+<text y="-2" font-size="11" font-weight="800" fill="{TEXT}" text-anchor="middle">github.com/Adyansh04</text>
+<text y="11" font-size="8" fill="#3FB950" text-anchor="middle">15 repositories shipped</text></g>''')
 
-    s.append(f'<text x="24" y="30" font-size="12" font-weight="800" fill="{TEXT}" letter-spacing="1">PROJECT ROUTING NETWORK</text>'
-             f'<text x="24" y="46" font-size="8.5" fill="{MUTED}">every project runs the same pipeline: build → QC sort → classify → ship</text>'
-             f'<text x="{W_ - 24}" y="{H_ - 16}" font-size="8.5" fill="{MUTED}" text-anchor="end">github.com/Adyansh04 · open the live map to click a card</text>')
+    s.append(f'<text x="24" y="30" font-size="13.5" font-weight="800" fill="{TEXT}" letter-spacing="1">PROJECT ROUTING NETWORK</text>'
+             f'<text x="24" y="47" font-size="9.5" fill="{MUTED}">every project runs the same pipeline: build → QC sort → classify → ship</text>'
+             f'<text x="{W_ - 24}" y="{H_ - 16}" font-size="9" fill="{MUTED}" text-anchor="end">github.com/Adyansh04</text>')
     s.append('<style>.hot{cursor:pointer}</style></svg>')
     return "".join(s)
 
@@ -358,9 +358,34 @@ def fusion_conveyornet():
 def fmt6(x):
     return f"{max(0.001, min(x, 0.999)):.4f}"
 
+# The README places small link-out arrows beside the map, one per card, because
+# links inside a single SVG are inert once GitHub serves it as an image. Each
+# arrow's canvas is exactly one card-pitch tall so the column tracks the rows.
+MAP_W, ICON_W = 850, 24
+
+
+def write_link_arrows(out_dir="assets/icons"):
+    scale = MAP_W / 1000
+    row = round(64 * scale)                 # card pitch, rendered
+    box, top = 21, (round(64 * scale) - 21) / 2
+    for p in P:
+        c, d = CAT[p["cat"]], DARK[p["cat"]]
+        w(f"{out_dir}/{p['key']}.svg",
+          f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ICON_W} {row}" width="{ICON_W}" height="{row}">'
+          f'<rect x="1.5" y="{top:.1f}" width="{box}" height="{box}" rx="6" fill="{d}" stroke="{c}" stroke-width="1.3"/>'
+          f'<g transform="translate({ICON_W / 2},{row / 2})" stroke="{c}" stroke-width="1.6" fill="none" '
+          f'stroke-linecap="round" stroke-linejoin="round">'
+          f'<path d="M-4,4 L4,-4"/><path d="M-1,-4 H4 V1"/></g></svg>')
+    for side, first in (("l", 70), ("r", 101)):
+        h = round((first + 27) * scale - row / 2)
+        w(f"{out_dir}/_gap-{side}.svg",
+          f'<svg xmlns="http://www.w3.org/2000/svg" width="{ICON_W}" height="{h}" viewBox="0 0 {ICON_W} {h}"/>')
+
+
 def main():
     w("assets/project-network.svg", fusion_conveyornet())
-    print("wrote assets/project-network.svg")
+    write_link_arrows()
+    print(f"wrote assets/project-network.svg and {len(P) + 2} link arrows")
 
 
 if __name__ == "__main__":

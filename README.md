@@ -30,11 +30,32 @@
 
 ## 🌐 Project Network
 
-<div align="center">
-  <a href="https://github.com/Adyansh04?tab=repositories">
-    <img src="./assets/project-network.svg" alt="Project Routing Network — 15 projects, each with its description, routed through a QC sort hub, classified by category neurons and shipped to GitHub" width="100%"/>
-  </a>
-</div>
+<table>
+<tr>
+<td align="center" valign="top">
+  <img src="./assets/icons/_gap-l.svg" alt="" width="24"/><br/>
+  <a href="https://github.com/Adyansh04/grove-g1" title="grove-g1 — Embodied-AI autonomy stack for the Unitree G1 humanoid — SLAM, Nav2, MoveIt."><img src="./assets/icons/grove.svg" alt="grove-g1" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/go2-ros2-inspection" title="Go2 Inspection — Language-driven inspection on a Unitree Go2 quadruped — RTAB-Map, Nav2, YOLOE."><img src="./assets/icons/go2.svg" alt="Go2 Inspection" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/whycode" title="WhyCode — 6-DOF fiducial localization in C++ — SIMD-tuned, CPU 180% to 12%."><img src="./assets/icons/whycode.svg" alt="WhyCode" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/olive" title="OLIVE — LiDAR + IMU + vision + encoder fusion (iSAM2) for drift-free localization."><img src="./assets/icons/olive.svg" alt="OLIVE" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/R2-Robocon" title="R2 Robocon — ABU Robocon 2024 mecanum robot — YOLO detection, Nav2 waypoint autonomy."><img src="./assets/icons/r2.svg" alt="R2 Robocon" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/AgroBot" title="AgroBot — Cotton-plucking agricultural AMR — Cartographer SLAM, YOLO, manipulator."><img src="./assets/icons/agro.svg" alt="AgroBot" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/omnibot" title="OmniBot — Three-wheel kiwi-drive robot — Micro-ROS on ESP32, EKF pose estimation."><img src="./assets/icons/omni.svg" alt="OmniBot" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/eyrc23_gg_1306" title="Vanguard — eYRC 2023-24 — overhead-camera A* navigation with CNN localization."><img src="./assets/icons/van.svg" alt="Vanguard" width="24"/></a>
+</td>
+<td><img src="./assets/project-network.svg" alt="Project routing network — 15 repositories routed through a QC sort hub and classified by category" width="850"/></td>
+<td align="center" valign="top">
+  <img src="./assets/icons/_gap-r.svg" alt="" width="24"/><br/>
+  <a href="https://github.com/Adyansh04/TelloEDU-ROS2" title="Drone Systems — Indoor drone autonomy on Tello EDU and Crazyflie — Nav2, SLAM Toolbox."><img src="./assets/icons/drone.svg" alt="Drone Systems" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/r1-demo-rc" title="R1 Demo — Unitree R1 humanoid teleoperation, joint control and simulation."><img src="./assets/icons/r1.svg" alt="R1 Demo" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/sepsis-atlas" title="Sepsis Atlas — Local-first clinical RAG — trial PDFs into grounded evidence tables."><img src="./assets/icons/sepsis.svg" alt="Sepsis Atlas" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/hex-game-hackathon" title="Hex AI — 1st place — autonomous Hex agent driven by Monte-Carlo Tree Search."><img src="./assets/icons/hex.svg" alt="Hex AI" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/itestra-hackathon" title="Itestra Snake — 2nd place — real-time bot for a competitive multiplayer Snake arena."><img src="./assets/icons/snake.svg" alt="Itestra Snake" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/ros2-project-template" title="ros2-template — Production-ready ROS 2 C++/Python template — CMake, GTest, CI/CD."><img src="./assets/icons/tpl.svg" alt="ros2-template" width="24"/></a><br/>
+  <a href="https://github.com/Adyansh04/ros-docker-dev" title="ros-docker-dev — GPU-accelerated Docker development environments for ROS 1 and ROS 2."><img src="./assets/icons/dock.svg" alt="ros-docker-dev" width="24"/></a>
+</td>
+</tr>
+</table>
 
 ---
 
