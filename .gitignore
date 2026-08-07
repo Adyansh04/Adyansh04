@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+
+# local preview pages, not part of the profile
+preview.html
+preview-showcase.html
+readme-preview.html
+.vscode/

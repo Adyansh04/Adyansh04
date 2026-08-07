@@ -1,0 +1,23 @@
+name: Contribution Graph
+on:
+  workflow_dispatch:
+  schedule: [{ cron: "30 6 * * *" }]
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate the contribution graph
+        run: python3 scripts/generate_contrib_graph.py --user ${{ github.repository_owner }} --out-dir assets
+      - name: Commit updated SVGs
+        run: |
+          git config user.name "Adyansh04"
+          git config user.email "107831478+Adyansh04@users.noreply.github.com"
+          git add assets/contrib-*.svg
+          git diff --cached --quiet || git commit -m "Update contribution graph [skip ci]"
+          git push
