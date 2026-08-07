@@ -197,7 +197,7 @@ def fusion_conveyornet():
     2-line description, so nothing depends on hover. Cards flank a QC sort hub
     that classifies each package into a category neuron -> output -> GitHub."""
     W_, H_ = 1000, 700
-    CW, CH, PITCH = 330, 54, 64
+    CW, CH, PITCH = 330, 58, 70
     hub, HS = (500, 250), 38
     T = 12.0
     s = [head(W_, H_)]
@@ -299,8 +299,8 @@ def fusion_conveyornet():
     # ---- project cards: icon + name + 2-line description, whole card is a link
     for p, (x, y) in zip(P, lcards + rcards):
         c = CAT[p["cat"]]
-        lines = textwrap.wrap(p["short"], 50)[:2]
-        body = "".join(f'<text x="48" y="{34 + n * 12}" font-size="8.8" fill="{MUTED}">{ln}</text>'
+        lines = textwrap.wrap(p["short"], 46)[:2]
+        body = "".join(f'<text x="48" y="{36 + n * 13}" font-size="9.6" fill="{MUTED}">{ln}</text>'
                        for n, ln in enumerate(lines))
         s.append(
             f'<a href="{p["url"]}" target="_blank" class="hot">'
@@ -308,8 +308,8 @@ def fusion_conveyornet():
             f'<g transform="translate({x},{y})">'
             f'<rect width="{CW}" height="{CH}" rx="9" fill="{DARK[p["cat"]]}" stroke="{c}" stroke-width="1.3"/>'
             f'<rect width="4" height="{CH}" rx="2" fill="{c}"/>'
-            f'<g transform="translate(27,{CH / 2})">{icon(p["key"], c, 0.95, 1.5)}</g>'
-            f'<text x="48" y="20" font-size="12.5" font-weight="800" fill="{TEXT}">{p["name"]}</text>'
+            f'<g transform="translate(27,{CH / 2})">{icon(p["key"], c, 1.05, 1.5)}</g>'
+            f'<text x="48" y="21" font-size="13.5" font-weight="800" fill="{TEXT}">{p["name"]}</text>'
             f'{body}</g></a>')
 
     # ---- QC sort hub
@@ -362,12 +362,16 @@ def fmt6(x):
 # links inside a single SVG are inert once GitHub serves it as an image. Each
 # arrow's canvas is exactly one card-pitch tall so the column tracks the rows.
 MAP_W, ICON_W = 850, 24
+# GitHub renders inline images on the text baseline, which adds a descender gap
+# under each one. The arrow canvas is shortened by that much so the stacked
+# column keeps step with the card rows instead of drifting down.
+BASELINE_GAP = 6.9   # measured against GitHub's 16px/1.5 body text
 
 
 def write_link_arrows(out_dir="assets/icons"):
     scale = MAP_W / 1000
-    row = round(64 * scale)                 # card pitch, rendered
-    box, top = 21, (round(64 * scale) - 21) / 2
+    row = round(70 * scale - BASELINE_GAP, 1)     # fractional keeps the column exactly in step
+    box, top = 21, (row - 21) / 2
     for p in P:
         c, d = CAT[p["cat"]], DARK[p["cat"]]
         w(f"{out_dir}/{p['key']}.svg",
@@ -377,7 +381,7 @@ def write_link_arrows(out_dir="assets/icons"):
           f'stroke-linecap="round" stroke-linejoin="round">'
           f'<path d="M-4,4 L4,-4"/><path d="M-1,-4 H4 V1"/></g></svg>')
     for side, first in (("l", 70), ("r", 101)):
-        h = round((first + 27) * scale - row / 2)
+        h = round((first + 29) * scale - BASELINE_GAP - row / 2, 1)
         w(f"{out_dir}/_gap-{side}.svg",
           f'<svg xmlns="http://www.w3.org/2000/svg" width="{ICON_W}" height="{h}" viewBox="0 0 {ICON_W} {h}"/>')
 
