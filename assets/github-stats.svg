@@ -47,6 +47,6 @@
 <circle cx="460" cy="279" r="3.8" fill="#89e051"/><text x="470" y="282" font-size="8.5" fill="#E6EDF3">Shell <tspan fill="#8B949E">1.4%</tspan></text>
 <circle cx="602" cy="279" r="3.8" fill="#384d54"/><text x="612" y="282" font-size="8.5" fill="#E6EDF3">Dockerfile <tspan fill="#8B949E">1.2%</tspan></text>
 <circle cx="744" cy="279" r="3.8" fill="#f1e05a"/><text x="754" y="282" font-size="8.5" fill="#E6EDF3">JavaScript <tspan fill="#8B949E">0.4%</tspan></text>
-<text x="24" y="306" font-size="8" fill="#8B949E">50 PRs · 1 issues · 0 reviews · 12 mo · top repo omnibot ★4</text>
+<text x="24" y="306" font-size="8" fill="#8B949E">50 PRs · 1 issue · 12 mo · top repo omnibot ★4</text>
 <text x="876" y="306" font-size="8" fill="#8B949E" text-anchor="end">built from the GitHub API · no third-party services</text>
 </svg>
