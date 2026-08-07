@@ -36,15 +36,6 @@
   </a>
 </div>
 
-<p align="center">
-  <a href="https://adyansh04.github.io/Adyansh04/assets/project-network.svg">
-    <img src="https://img.shields.io/badge/🖱️_Open_the_live_map-click_any_card_to_open_its_repo-0D1117?style=for-the-badge&labelColor=0D1117&color=3FB950" alt="Open the live interactive map"/>
-  </a>
-  <a href="https://adyansh04.github.io/Adyansh04/assets/knowledge-graph-3d.html">
-    <img src="https://img.shields.io/badge/🌐_Explore_in_3D-drag,_zoom,_click_nodes-0D1117?style=for-the-badge&labelColor=0D1117&color=58A6FF" alt="Interactive 3D knowledge graph"/>
-  </a>
-</p>
-
 ---
 
 ## 🛠️ Technologies & Tools

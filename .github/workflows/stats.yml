@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   schedule: [{ cron: "15 5 * * *" }]     # daily, before the other cards
   push:
-    branches: [main, readme-enhance]
+    branches: [main]
 permissions:
   contents: write
 jobs:
