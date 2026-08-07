@@ -196,7 +196,7 @@ def fusion_conveyornet():
     """FINAL — large labelled routing map: every project is a card with its own
     2-line description, so nothing depends on hover. Cards flank a QC sort hub
     that classifies each package into a category neuron -> output -> GitHub."""
-    W_, H_ = 1000, 700
+    W_, H_ = 1000, 860
     CW, CH, PITCH = 330, 58, 70
     hub, HS = (500, 250), 38
     T = 12.0
@@ -212,9 +212,9 @@ def fusion_conveyornet():
     lports = [(hub[0] - HS, hub[1] - 42 + k * 12) for k in range(len(L))]
     rports = [(hub[0] + HS, hub[1] - 36 + k * 12) for k in range(len(R))]
 
-    neurons = {"rob": (380, 420), "ai": (460, 420), "hack": (540, 420), "dev": (620, 420)}
+    neurons = {"rob": (290, 660), "ai": (430, 660), "hack": (570, 660), "dev": (710, 660)}
     nlabel = {"rob": "ROBOTICS", "ai": "AI &amp; DATA", "hack": "HACKATHONS", "dev": "DEV TOOLS"}
-    out, ship = (500, 545), (500, 640)
+    out, ship = (500, 752), (500, 812)
 
     # ---- orthogonal routes, nested so no two traces cross.
     # Cards above the hub turn closest to it, cards below turn farthest out;
@@ -266,9 +266,9 @@ def fusion_conveyornet():
     # ---- neural stage: hub -> category neurons -> output -> ship (curved)
     nedges, oedges = {}, {}
     for k, (nx, ny) in neurons.items():
-        nedges[k] = f"M{hub[0]},{hub[1] + HS} C{hub[0]},{hub[1] + HS + 70} {nx},{ny - 80} {nx},{ny - 17}"
+        nedges[k] = f"M{hub[0]},{hub[1] + HS} C{hub[0]},{hub[1] + HS + 150} {nx},{ny - 150} {nx},{ny - 17}"
         s.append(f'<path d="{nedges[k]}" fill="none" stroke="{CAT[k]}" stroke-width="1.3" opacity="0.35"/>')
-        oedges[k] = f"M{nx},{ny + 17} C{nx},{ny + 62} {out[0]},{out[1] - 62} {out[0]},{out[1] - 24}"
+        oedges[k] = f"M{nx},{ny + 17} C{nx},{ny + 34} {out[0]},{out[1] - 40} {out[0]},{out[1] - 24}"
         s.append(f'<path d="{oedges[k]}" fill="none" stroke="{CAT[k]}" stroke-width="1.3" opacity="0.35"/>')
     s.append(f'<path d="M{out[0]},{out[1] + 24} V{ship[1] - 22}" stroke="#1b222c" stroke-width="5"/>'
              f'<path d="M{out[0]},{out[1] + 24} V{ship[1] - 22}" stroke="#3FB950" stroke-width="1.8" stroke-dasharray="6,8">'
@@ -335,7 +335,7 @@ def fusion_conveyornet():
                  f'<animate attributeName="stroke-width" values="{";".join(vals)}" keyTimes="{";".join(kts)}" dur="{T}s" repeatCount="indefinite"/></circle>'
                  f'<circle cx="{nx}" cy="{ny}" r="4.5" fill="{CAT[k]}" opacity="0.85"/>'
                  f'<text x="{nx}" y="{ny + 31}" font-size="8" font-weight="700" fill="{CAT[k]}" text-anchor="middle">{nlabel[k]}</text>')
-    s.append(f'<text x="{hub[0]}" y="{neurons["rob"][1] - 44}" font-size="8.5" fill="{MUTED}" text-anchor="middle">neural sort · 4 classes</text>')
+    s.append(f'<text x="{hub[0]}" y="{neurons["rob"][1] - 46}" font-size="9" fill="{MUTED}" text-anchor="middle" letter-spacing="1">NEURAL SORT · 4 CLASSES</text>')
 
     # ---- output neuron + shipping
     s.append(f'''<g transform="translate({out[0]},{out[1]})">
