@@ -190,7 +190,7 @@ def render(d):
 <rect x="6" y="6" width="{W - 12}" height="{H_ - 12}" rx="15" fill="url(#sgrid)"/>
 <text x="24" y="30" class="h" font-size="13" font-weight="800" fill="{TEXT}" letter-spacing="1.4">GITHUB STATS</text>
 <circle cx="{W - 218}" cy="25" r="3" fill="{G}"><animate attributeName="opacity" values="1;0.25;1" dur="2s" repeatCount="indefinite"/></circle>
-<text x="{W - 24}" y="29" font-size="8.5" fill="{MUTED}" text-anchor="end">self-generated · updated {stamp}</text>
+<text x="{W - 24}" y="29" font-size="8.5" fill="{MUTED}" text-anchor="end">Updated {stamp}</text>
 <line x1="24" y1="40" x2="{W - 24}" y2="40" stroke="{LINE}" stroke-width="1" opacity="0.7"/>''']
 
     # ── hero figures ──────────────────────────────────────────────────────
@@ -225,9 +225,6 @@ def render(d):
     # ── language mix ──────────────────────────────────────────────────────
     ly = 246
     s.append(f'<text x="30" y="{ly - 6}" font-size="8" fill="{MUTED}" letter-spacing="1.2">LANGUAGES · BY CODE VOLUME</text>')
-    if d.get("skipped"):
-        s.append(f'<text x="{W - 30}" y="{ly - 6}" font-size="7.5" fill="{MUTED}" text-anchor="end">'
-                 f'excludes {", ".join(esc(x) for x in d["skipped"])}</text>')
     off = 0.0
     for i, (name, size) in enumerate(top):
         seg = (W - 60) * size / ltot
@@ -247,13 +244,11 @@ def render(d):
     tail = f' · top repo {esc(star_repo["name"])} ★{star_repo["stargazers_count"]}' if star_repo and star_repo["stargazers_count"] else ""
     if e:
         parts = [f'{n} {w if n == 1 else w + "s"}'
-                 for n, w in ((e["prs"], "PR"), (e["issues"], "issue"), (e["reviews"], "review")) if n]
-        foot = " · ".join(parts) + f' · 12 mo{tail}'
+                 for n, w in ((e["prs"], "pull request"), (e["issues"], "issue"), (e["reviews"], "review")) if n]
+        foot = "Past 12 months · " + " · ".join(parts) + tail
     else:
-        foot = f'{ltot / 1e6:.1f} MB of tracked robotics code{tail}' 
+        foot = f'{ltot / 1e6:.1f} MB of tracked code{tail}' 
     s.append(f'<text x="24" y="{H_ - 14}" font-size="8" fill="{MUTED}">{foot}</text>')
-    s.append(f'<text x="{W - 24}" y="{H_ - 14}" font-size="8" fill="{MUTED}" text-anchor="end">'
-             f'built from the GitHub API · no third-party services</text>')
     s.append('</svg>')
     return "\n".join(s)
 
