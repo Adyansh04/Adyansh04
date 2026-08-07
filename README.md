@@ -25,6 +25,7 @@
 - ⚡ I turn models into **real-world hardware deployments** — C++ perception pipelines accelerated with **SIMD / SIMT and CUDA**.
 - 🌱 Interests: ROS 2, SLAM, sensor fusion, VLA models, imitation learning, sim-to-real.
 - 💬 Ask me about **ROS / ROS 2, perception, navigation, SLAM and simulation**.
+- 📫 Reach me at **gupta.adyansh@gmail.com**
 
 ---
 
