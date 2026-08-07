@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   schedule: [{ cron: "30 6 * * *" }]
   push:
-    branches: [main, readme-enhance]   # branch entry is temporary, removed before merge
+    branches: [main]
 permissions:
   contents: write
 jobs:
