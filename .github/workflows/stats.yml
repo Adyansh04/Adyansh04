@@ -1,0 +1,27 @@
+name: GitHub Stats
+on:
+  workflow_dispatch:
+  schedule: [{ cron: "15 5 * * *" }]     # daily, before the other cards
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate the stats card
+        env:
+          # METRICS_TOKEN (a PAT) also picks up private-contribution totals;
+          # the default GITHUB_TOKEN is enough for everything public.
+          GITHUB_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+        run: python3 scripts/generate_stats.py --user ${{ github.repository_owner }} --out assets/github-stats.svg
+      - name: Commit if changed
+        run: |
+          git config user.name "Adyansh04"
+          git config user.email "107831478+Adyansh04@users.noreply.github.com"
+          git add assets/github-stats.svg
+          git diff --cached --quiet || git commit -m "Update GitHub stats card [skip ci]"
+          git push

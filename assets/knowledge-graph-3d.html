@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adyansh04 — 3D Project Ecosystem</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#080c15;font-family:system-ui,-apple-system,sans-serif;overflow:hidden;color:#e2e8f0}
+    #graph{width:100vw;height:100vh}
+    #tooltip{
+      position:fixed;display:none;pointer-events:none;z-index:100;
+      background:rgba(8,12,21,0.94);border:1px solid rgba(255,255,255,0.1);
+      border-radius:10px;padding:14px 18px;max-width:320px;
+      backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,0.6);
+    }
+    #tooltip h3{font-size:13px;font-weight:700;margin-bottom:5px}
+    #tooltip p{font-size:11.5px;color:#94a3b8;line-height:1.55}
+    #tooltip .tech{display:inline-block;font-size:10px;padding:3px 8px;border-radius:5px;margin-top:7px;font-weight:600;font-family:ui-monospace,monospace}
+    #legend{
+      position:fixed;bottom:16px;left:16px;z-index:50;
+      background:rgba(8,12,21,0.88);border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;padding:12px 16px;backdrop-filter:blur(10px);
+    }
+    #legend h4{font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:7px;letter-spacing:1.2px;text-transform:uppercase}
+    .lr{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+    .ld{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+    .ll{font-size:10.5px;color:#64748b}
+    #title{
+      position:fixed;top:16px;left:16px;z-index:50;
+      background:rgba(8,12,21,0.88);border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;padding:14px 18px;backdrop-filter:blur(10px);
+    }
+    #title h1{font-size:14px;font-weight:800;color:#f1f5f9;letter-spacing:0.3px}
+    #title p{font-size:10px;color:#475569;margin-top:3px}
+    #controls{
+      position:fixed;top:16px;right:16px;z-index:50;
+      background:rgba(8,12,21,0.88);border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px;padding:10px 14px;backdrop-filter:blur(10px);
+      font-size:10px;color:#475569;line-height:1.7;
+    }
+  </style>
+</head>
+<body>
+  <div id="graph"></div>
+  <div id="tooltip"><h3 id="tt-n"></h3><p id="tt-d"></p><span class="tech" id="tt-t"></span></div>
+  <div id="title">
+    <h1>PROJECT ECOSYSTEM — 15 REPOS</h1>
+    <p>Drag to rotate · Scroll to zoom · Click → GitHub</p>
+  </div>
+  <div id="controls">🖱️ Drag rotate<br>🔍 Scroll zoom<br>👆 Click → repo</div>
+  <div id="legend">
+    <h4>Categories</h4>
+    <div class="lr"><div class="ld" style="background:#3fb950"></div><span class="ll">Robotics & Autonomy (10)</span></div>
+    <div class="lr"><div class="ld" style="background:#a371f7"></div><span class="ll">AI, Data & Hackathons (3)</span></div>
+    <div class="lr"><div class="ld" style="background:#58a6ff"></div><span class="ll">Hackathon Wins (2)</span></div>
+    <div class="lr"><div class="ld" style="background:#f0883e"></div><span class="ll">Dev Tools (2)</span></div>
+  </div>
+
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three-spritetext@1.8.2/dist/three-spritetext.min.js"></script>
+  <script src="https://unpkg.com/3d-force-graph@1.73.3/dist/3d-force-graph.min.js"></script>
+  <script>
+    const C = {
+      core:      '#e2e8f0',
+      robotics:  '#3fb950',
+      ai:        '#a371f7',
+      hackathons:'#58a6ff',
+      devtools:  '#f0883e',
+    };
+
+    const nodes = [
+      {id:'core',name:'ADYANSH',group:'core',val:30,desc:'Core Engine · 15 Repositories',url:'https://github.com/Adyansh04',fx:0,fy:0,fz:0},
+      {id:'hr',name:'Robotics, Autonomy &\nHumanoid Systems',group:'robotics',val:20,desc:'10 projects — AMRs, Quadrupeds, Humanoids, Drones',isHub:true},
+      {id:'ha',name:'AI, Data Platforms\n& Hackathons',group:'ai',val:15,desc:'3 projects — RAG Engine, Game AI, Snake Bot',isHub:true},
+      {id:'hh',name:'Hackathon Wins',group:'hackathons',val:12,desc:'2 competition victories — 1st & 2nd place',isHub:true},
+      {id:'hd',name:'Dev Tools &\nInfrastructure',group:'devtools',val:12,desc:'2 projects — ROS2 Templates, Docker Environments',isHub:true},
+
+      {id:'grove',name:'grove-g1',group:'robotics',val:8,isNew:true,desc:'Embodied AI & humanoid control framework for high-mobility robotic platforms.',tech:'ROS2 · VLA · Sim-to-Real',url:'https://github.com/Adyansh04/grove-g1'},
+      {id:'go2',name:'Go2 Inspection',group:'robotics',val:8,desc:'Natural-language-driven inspection on Unitree Go2 quadruped with RTAB-Map & MCP.',tech:'ROS2 · RTAB-Map · Nav2 · YOLOE',url:'https://github.com/Adyansh04/go2-ros2-inspection'},
+      {id:'olive',name:'OLIVE SLAM',group:'robotics',val:8,desc:'Graph-based multi-sensor fusion (LiDAR+Inertial+Vision+Encoders) for drift-free localization.',tech:'C++ · g2o/Ceres · EKF',url:'https://github.com/Adyansh04/olive'},
+      {id:'why',name:'WhyCode SIMD',group:'robotics',val:8,desc:'AVX-512 → 4× CPU speedup, CUDA → 45× GPU speedup for fiducial detection.',tech:'C++20 · AVX-512 · CUDA',url:'https://github.com/Adyansh04/whycode'},
+      {id:'r2',name:'R2 Robocon',group:'robotics',val:6,desc:'Autonomous mecanum drive robot with YOLO detection and Nav2 waypoint navigation.',tech:'ROS2 · YOLO · Nav2',url:'https://github.com/Adyansh04/R2-Robocon'},
+      {id:'agro',name:'AgroBot',group:'robotics',val:6,desc:'Cotton-plucking agricultural robot with Cartographer SLAM & manipulator kinematics.',tech:'ROS2 · Cartographer · MoveIt',url:'https://github.com/Adyansh04/AgroBot'},
+      {id:'omni',name:'OmniBot',group:'robotics',val:5,desc:'Three-wheel omnidirectional mobile robot with Micro-ROS ESP32 and EKF.',tech:'ROS2 · Micro-ROS · ESP32',url:'https://github.com/Adyansh04/omnibot'},
+      {id:'van',name:'Vanguard eYRC',group:'robotics',val:5,desc:'Overhead-camera-guided A* path planning with real-time CNN image localization.',tech:'Python · A* · CNN · QGIS',url:'https://github.com/Adyansh04/eyrc23_gg_1306'},
+      {id:'drone',name:'Drone Systems',group:'robotics',val:5,desc:'Autonomous indoor drone navigation on Tello EDU / Crazyflie micro-quadcopters.',tech:'ROS2 · Nav2 · SLAM Toolbox',url:'https://github.com/Adyansh04/TelloEDU-ROS2'},
+      {id:'r1',name:'R1 Demo',group:'robotics',val:5,desc:'Teleoperation, joint control and simulation for the Unitree R1 humanoid.',tech:'C++ · ROS2 · Unitree SDK',url:'https://github.com/Adyansh04/r1-demo-rc'},
+
+      {id:'sep',name:'Sepsis Atlas',group:'ai',val:7,desc:'Local-first RAG engine converting clinical trial PDFs into source-grounded evidence tables.',tech:'ChromaDB · Claude 3.5 · Pydantic',url:'https://github.com/Adyansh04/sepsis-atlas'},
+      {id:'hex',name:'Hex AI (1st)',group:'ai',val:7,desc:'1st place autonomous Hex pathfinding AI with Monte Carlo Tree Search.',tech:'Python · MCTS · Game Theory',url:'https://github.com/Adyansh04/hex-game-hackathon'},
+      {id:'ite',name:'Itestra Snake (2nd)',group:'ai',val:6,desc:'2nd place real-time autonomous bot strategy for competitive multiplayer Snake.',tech:'C++ · Graph Search',url:'https://github.com/Adyansh04/itestra-hackathon'},
+
+      {id:'tpl',name:'ros2-project-template',group:'devtools',val:5,desc:'Production-ready ROS2 C++/Python workspace boilerplate with CMake & CI/CD.',tech:'ROS2 · CMake · GTest',url:'https://github.com/Adyansh04/ros2-project-template'},
+      {id:'dock',name:'ros-docker-dev',group:'devtools',val:5,desc:'GPU-accelerated Docker container environment for ROS1/ROS2 development.',tech:'Docker · CUDA · Linux',url:'https://github.com/Adyansh04/ros-docker-dev'},
+    ];
+
+    const links = [
+      {source:'core',target:'hr',value:5},{source:'core',target:'ha',value:3},
+      {source:'core',target:'hh',value:2},{source:'core',target:'hd',value:2},
+      ...['grove','go2','olive','why','r2','agro','omni','van','drone','r1'].map(t=>({source:'hr',target:t,value:1})),
+      ...['sep','hex','ite'].map(t=>({source:'ha',target:t,value:1})),
+      {source:'hh',target:'hex',value:1},{source:'hh',target:'ite',value:1},
+      ...['tpl','dock'].map(t=>({source:'hd',target:t,value:1})),
+    ];
+
+    const tt=document.getElementById('tooltip'),
+          tn=document.getElementById('tt-n'),
+          td=document.getElementById('tt-d'),
+          te=document.getElementById('tt-t');
+
+    const G = ForceGraph3D()(document.getElementById('graph'))
+      .graphData({nodes,links})
+      .backgroundColor('#080c15')
+      .showNavInfo(false)
+      .enableNodeDrag(false)
+      .warmupTicks(180)
+      .cooldownTime(4000)
+      .d3VelocityDecay(0.55)
+      .nodeVal(n=>n.val)
+      .nodeColor(n=>C[n.group])
+      .nodeOpacity(0.9)
+      .nodeResolution(24)
+      .linkColor(()=>'rgba(100,116,139,0.18)')
+      .linkWidth(l=>l.value>2?1.8:0.8)
+      .linkOpacity(0.5)
+      .linkDirectionalParticles(l=>l.value>2?2:0)
+      .linkDirectionalParticleSpeed(0.0025)
+      .linkDirectionalParticleWidth(1.2)
+      .linkDirectionalParticleColor(l=>{
+        const s=typeof l.source==='object'?l.source:nodes.find(n=>n.id===l.source);
+        return C[s?.group]||'#64748b';
+      })
+      .nodeThreeObject(node=>{
+        const g=new THREE.Group();
+        const color=new THREE.Color(C[node.group]);
+
+        if(node.id==='core'){
+          // Core: Icosahedron (geometric, faceted)
+          const geo=new THREE.IcosahedronGeometry(7,1);
+          const mat=new THREE.MeshStandardMaterial({color:0x1e293b,emissive:color,emissiveIntensity:0.15,metalness:0.5,roughness:0.4,transparent:true,opacity:0.95});
+          g.add(new THREE.Mesh(geo,mat));
+          // Wireframe overlay
+          const wire=new THREE.Mesh(new THREE.IcosahedronGeometry(7.3,1),new THREE.MeshBasicMaterial({color:color,wireframe:true,transparent:true,opacity:0.25}));
+          g.add(wire);
+          // Subtle outer ring
+          const ring=new THREE.Mesh(new THREE.TorusGeometry(10,0.3,8,32),new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:0.15}));
+          ring.rotation.x=Math.PI/2;
+          g.add(ring);
+        } else if(node.isHub){
+          // Hubs: Dodecahedron (larger, distinct shape)
+          const geo=new THREE.DodecahedronGeometry(5.5,0);
+          const mat=new THREE.MeshStandardMaterial({color:color.clone().multiplyScalar(0.25),emissive:color,emissiveIntensity:0.12,metalness:0.4,roughness:0.5,transparent:true,opacity:0.88});
+          g.add(new THREE.Mesh(geo,mat));
+          // Wireframe
+          const wire=new THREE.Mesh(new THREE.DodecahedronGeometry(5.8,0),new THREE.MeshBasicMaterial({color:color,wireframe:true,transparent:true,opacity:0.2}));
+          g.add(wire);
+        } else if(node.isNew){
+          // grove-g1 NEW: Octahedron with ring
+          const geo=new THREE.OctahedronGeometry(4,0);
+          const mat=new THREE.MeshStandardMaterial({color:color.clone().multiplyScalar(0.3),emissive:color,emissiveIntensity:0.18,metalness:0.5,roughness:0.3,transparent:true,opacity:0.9});
+          const mesh=new THREE.Mesh(geo,mat);
+          g.add(mesh);
+          // Gold ring for NEW
+          const ring=new THREE.Mesh(new THREE.TorusGeometry(5.5,0.4,8,24),new THREE.MeshBasicMaterial({color:0xfbbf24,transparent:true,opacity:0.5}));
+          ring.rotation.x=Math.PI/2;
+          g.add(ring);
+        } else {
+          // Regular projects: clean sphere
+          const size = node.val >= 7 ? 3.5 : 2.8;
+          const geo=new THREE.SphereGeometry(size,20,20);
+          const mat=new THREE.MeshStandardMaterial({color:color.clone().multiplyScalar(0.35),emissive:color,emissiveIntensity:0.1,metalness:0.3,roughness:0.6,transparent:true,opacity:0.85});
+          g.add(new THREE.Mesh(geo,mat));
+        }
+
+        // Label sprite
+        const label=node.name.replace(/\n/g,' ');
+        const sp=new SpriteText(label);
+        sp.color=node.id==='core'?'#f1f5f9':node.isHub?C[node.group]:'#94a3b8';
+        sp.textHeight=node.id==='core'?3.5:node.isHub?2.5:2.2;
+        sp.fontWeight=node.isHub||node.id==='core'?'700':'500';
+        sp.backgroundColor='rgba(8,12,21,0.75)';
+        sp.padding=[2,4];
+        sp.borderRadius=3;
+        sp.position.y=node.id==='core'?-11:node.isHub?-9:-6;
+        g.add(sp);
+
+        return g;
+      })
+      .onNodeHover(node=>{
+        document.body.style.cursor=node?'pointer':'default';
+        if(node&&node.desc){
+          tn.textContent=node.name.replace(/\n/g,' ');
+          tn.style.color=C[node.group];
+          td.textContent=node.desc;
+          if(node.tech){te.textContent=node.tech;te.style.display='inline-block';te.style.background=C[node.group]+'18';te.style.color=C[node.group]}
+          else{te.style.display='none'}
+          tt.style.display='block';
+        }else{tt.style.display='none'}
+      })
+      .onNodeClick(node=>{if(node.url)window.open(node.url,'_blank')});
+
+    document.addEventListener('mousemove',e=>{
+      tt.style.left=Math.min(e.clientX+15,window.innerWidth-340)+'px';
+      tt.style.top=Math.min(e.clientY+15,window.innerHeight-120)+'px';
+    });
+
+    // Compact forces — keep the graph as one readable cluster
+    G.d3Force('charge').strength(n=>n.id==='core'?-100:n.isHub?-70:-35);
+    G.d3Force('link').distance(l=>l.value>2?55:30);
+    G.d3Force('center').strength(1.0);
+
+    // Start outside the graph; auto-frame it once physics settle
+    G.cameraPosition({x:0,y:60,z:320});
+    let rotating=false, framed=false, angle=0, orbitR=300, orbitY=55;
+    G.onEngineStop(()=>{
+      if(framed) return; framed=true;
+      G.zoomToFit(700,60);
+      setTimeout(()=>{
+        const p=G.cameraPosition();
+        orbitR=Math.max(220,Math.hypot(p.x,p.z));
+        orbitY=p.y; angle=Math.atan2(p.x,p.z);
+        rotating=true;
+      },900);
+    });
+
+    // Very slow orbit; any manual interaction hands camera control to the user for good
+    (function loop(){
+      if(rotating){
+        angle+=0.0005;
+        G.cameraPosition({x:orbitR*Math.sin(angle),z:orbitR*Math.cos(angle),y:orbitY});
+      }
+      requestAnimationFrame(loop);
+    })();
+    const el=document.getElementById('graph');
+    ['pointerdown','wheel'].forEach(ev=>el.addEventListener(ev,()=>{rotating=false},{passive:true}));
+
+    // Lighting
+    const sc=G.scene();
+    sc.add(new THREE.AmbientLight(0x334155,3));
+    const dl=new THREE.DirectionalLight(0xf1f5f9,0.6);dl.position.set(80,150,80);sc.add(dl);
+    const dl2=new THREE.DirectionalLight(0x334155,0.3);dl2.position.set(-80,-50,-80);sc.add(dl2);
+
+    // Subtle star field
+    const sg=new THREE.BufferGeometry();const sc2=500;const sp=new Float32Array(sc2*3);
+    for(let i=0;i<sc2*3;i++)sp[i]=(Math.random()-0.5)*600;
+    sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
+    sc.add(new THREE.Points(sg,new THREE.PointsMaterial({color:0x1e293b,size:0.5,transparent:true,opacity:0.5})));
+  </script>
+</body>
+</html>
