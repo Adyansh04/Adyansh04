@@ -245,8 +245,12 @@ def render(d):
                  f'<tspan fill="{MUTED}">{size / ltot * 100:.1f}%</tspan></text>')
 
     tail = f' · top repo {esc(star_repo["name"])} ★{star_repo["stargazers_count"]}' if star_repo and star_repo["stargazers_count"] else ""
-    foot = (f'{e["prs"]} PRs · {e["issues"]} issues · {e["reviews"]} reviews · 12 mo{tail}'
-            if e else f'{ltot / 1e6:.1f} MB of tracked robotics code{tail}')
+    if e:
+        parts = [f'{n} {w if n == 1 else w + "s"}'
+                 for n, w in ((e["prs"], "PR"), (e["issues"], "issue"), (e["reviews"], "review")) if n]
+        foot = " · ".join(parts) + f' · 12 mo{tail}'
+    else:
+        foot = f'{ltot / 1e6:.1f} MB of tracked robotics code{tail}' 
     s.append(f'<text x="24" y="{H_ - 14}" font-size="8" fill="{MUTED}">{foot}</text>')
     s.append(f'<text x="{W - 24}" y="{H_ - 14}" font-size="8" fill="{MUTED}" text-anchor="end">'
              f'built from the GitHub API · no third-party services</text>')
