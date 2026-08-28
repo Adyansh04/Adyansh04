@@ -1,7 +1,11 @@
 name: Contribution Graph
 on:
   workflow_dispatch:
-  schedule: [{ cron: "30 6 * * *" }]
+  # Off-peak and on an odd minute, 36 minutes after the stats card so the two
+  # never contend for the shared concurrency group. 14:28 is the safety net.
+  schedule:
+    - cron: "23 4 * * *"
+    - cron: "28 14 * * *"
   push:
     branches: [main]
 concurrency:
@@ -9,15 +13,44 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  actions: read            # the fallback guard reads this workflow's run history
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+
+      - name: Decide whether this run has work to do
+        id: guard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Anything other than the afternoon cron always runs.
+          if [ "${{ github.event.schedule }}" != "28 14 * * *" ]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Afternoon fallback: skip if a scheduled run already succeeded today.
+          today=$(date -u +%F)
+          done_today=$(gh api \
+            "repos/${{ github.repository }}/actions/workflows/contrib-graph.yml/runs?event=schedule&status=success&per_page=30" \
+            --jq "[.workflow_runs[] | select(.created_at | startswith(\"$today\"))] | length" 2>/dev/null || echo 0)
+          if [ "${done_today:-0}" -gt 0 ]; then
+            echo "The morning run already succeeded today; nothing to do."
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "No successful run yet today; proceeding as the fallback."
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate the contribution graph
+        if: steps.guard.outputs.proceed == 'true'
         run: python3 scripts/generate_contrib_graph.py --user ${{ github.repository_owner }} --out-dir assets
-      - name: Commit updated SVGs
+
+      - name: Commit if changed
+        if: steps.guard.outputs.proceed == 'true'
         run: |
           git config user.name "Adyansh04"
           git config user.email "107831478+Adyansh04@users.noreply.github.com"

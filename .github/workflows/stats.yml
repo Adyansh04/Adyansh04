@@ -1,7 +1,12 @@
 name: GitHub Stats
 on:
   workflow_dispatch:
-  schedule: [{ cron: "15 5 * * *" }]     # daily, before the other cards
+  # 03:47 UTC is off-peak and an odd minute, so the run is less likely to sit
+  # behind the crowd of jobs scheduled on the hour. 13:52 is a safety net for
+  # the days GitHub drops the morning window entirely.
+  schedule:
+    - cron: "47 3 * * *"
+    - cron: "52 13 * * *"
   push:
     branches: [main]
 concurrency:
@@ -9,19 +14,48 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  actions: read            # the fallback guard reads this workflow's run history
 jobs:
   stats:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
+
+      - name: Decide whether this run has work to do
+        id: guard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Anything other than the afternoon cron always runs.
+          if [ "${{ github.event.schedule }}" != "52 13 * * *" ]; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Afternoon fallback: skip if a scheduled run already succeeded today.
+          today=$(date -u +%F)
+          done_today=$(gh api \
+            "repos/${{ github.repository }}/actions/workflows/stats.yml/runs?event=schedule&status=success&per_page=30" \
+            --jq "[.workflow_runs[] | select(.created_at | startswith(\"$today\"))] | length" 2>/dev/null || echo 0)
+          if [ "${done_today:-0}" -gt 0 ]; then
+            echo "The morning run already succeeded today; nothing to do."
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "No successful run yet today; proceeding as the fallback."
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate the stats card
+        if: steps.guard.outputs.proceed == 'true'
         env:
           # METRICS_TOKEN (a PAT) also picks up private-contribution totals;
           # the default GITHUB_TOKEN is enough for everything public.
           GITHUB_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
         run: python3 scripts/generate_stats.py --user ${{ github.repository_owner }} --out assets/github-stats.svg
+
       - name: Commit if changed
+        if: steps.guard.outputs.proceed == 'true'
         run: |
           git config user.name "Adyansh04"
           git config user.email "107831478+Adyansh04@users.noreply.github.com"
