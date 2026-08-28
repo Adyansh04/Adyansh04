@@ -3,7 +3,7 @@
 <style>text{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}</style>
 <rect width="910" height="175" rx="10" fill="#0d1117" stroke="#30363d"/>
 <text x="16" y="21" font-size="10" fill="#8b949e">$ ros2 run gantry_sort pick_place --input contributions</text>
-<text x="894" y="21" text-anchor="end" font-size="10" font-weight="bold" fill="#58a6ff">1002 contributions</text>
+<text x="894" y="21" text-anchor="end" font-size="10" font-weight="bold" fill="#58a6ff">1004 contributions</text>
 <g transform="translate(0,10)">
 <g transform="translate(22.0,40.0)"><g><animateTransform attributeName="transform" type="scale" dur="26s" repeatCount="indefinite" calcMode="linear" values="1;1;0;0" keyTimes="0;0.002;0.01;1"/><rect x="-6.0" y="-6.0" width="12" height="12" rx="3" fill="#0e4429"/></g></g>
 <rect x="16" y="49" width="12" height="12" rx="3" fill="#161b22"/>
@@ -374,6 +374,7 @@
 <g transform="translate(802.0,70.0)"><g><animateTransform attributeName="transform" type="scale" dur="26s" repeatCount="indefinite" calcMode="linear" values="1;1;0;0" keyTimes="0;0.8876;0.8956;1"/><rect x="-6.0" y="-6.0" width="12" height="12" rx="3" fill="#0e4429"/></g></g>
 <g transform="translate(802.0,85.0)"><g><animateTransform attributeName="transform" type="scale" dur="26s" repeatCount="indefinite" calcMode="linear" values="1;1;0;0" keyTimes="0;0.899;0.907;1"/><rect x="-6.0" y="-6.0" width="12" height="12" rx="3" fill="#006d32"/></g></g>
 <g transform="translate(802.0,100.0)"><g><animateTransform attributeName="transform" type="scale" dur="26s" repeatCount="indefinite" calcMode="linear" values="1;1;0;0" keyTimes="0;0.9103;0.9183;1"/><rect x="-6.0" y="-6.0" width="12" height="12" rx="3" fill="#0e4429"/></g></g>
+<rect x="796" y="109" width="12" height="12" rx="3" fill="#161b22"/>
 <rect x="7" y="24" width="4" height="116" rx="1" fill="#21262d" stroke="#8b949e" stroke-width="0.8"/><rect x="4.5" y="140" width="9" height="3" rx="1" fill="#8b949e"/>
 <rect x="813" y="24" width="4" height="116" rx="1" fill="#21262d" stroke="#8b949e" stroke-width="0.8"/><rect x="810.5" y="140" width="9" height="3" rx="1" fill="#8b949e"/>
 <rect x="5" y="22" width="814" height="6" rx="2" fill="#21262d" stroke="#8b949e" stroke-width="0.8"/>
